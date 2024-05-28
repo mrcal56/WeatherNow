@@ -6,7 +6,6 @@ const WeatherForm = ({ getWeather }) => {
   const [city, setCity] = useState('');
   const [locationFetched, setLocationFetched] = useState(false);
 
-  // Obtener automáticamente la ubicación actual del usuario una vez
   useEffect(() => {
     if (!locationFetched && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import WeatherForm from './components/WeatherForm';
 import WeatherDisplay from './components/WeatherDisplay';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'weather-icons/css/weather-icons.css';
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
