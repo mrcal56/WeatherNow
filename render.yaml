@@ -1,10 +1,24 @@
 services:
   - type: web
-    name: weather-app
+    name: weather-app-backend
     env: python
     plan: free
-    buildCommand: |
-      cd frontend && npm install && npm run build &&
-      cd ../backend && pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     rootDir: backend
+    envVars:
+      - key: FLASK_ENV
+        value: production
+
+  - type: web
+    name: weather-app-frontend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: serve -s build
+    rootDir: frontend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS
+        value: --openssl-legacy-provider
