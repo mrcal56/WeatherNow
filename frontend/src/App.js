@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import WeatherForm from './components/WeatherForm';
-import WeatherDisplay from './components/WeatherDisplay';
+import WeatherForm from './components/weatherForm';
+import WeatherDisplay from './components/weatherDisplay';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
