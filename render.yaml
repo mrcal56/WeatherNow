@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: weather-app
+    env: python
+    plan: free
+    buildCommand: |
+      cd frontend && npm install && npm run build &&
+      cd ../backend && pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    rootDir: backend
