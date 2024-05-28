@@ -9,7 +9,7 @@
     "web-vitals": "^1.0.1",
     "bootstrap": "^4.5.2",
     "react-bootstrap": "^1.5.2",
-    "weather-icons": "^2.0.9"
+    "weather-icons": "^2.0.10"
   },
   "scripts": {
     "start": "react-scripts start",
