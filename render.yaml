@@ -14,10 +14,12 @@ services:
     name: weather-app-frontend
     env: node
     plan: free
-    runtime: nodejs14
+    runtime: nodejs16
     buildCommand: npm install && npm run build
     startCommand: serve -s build
     rootDir: frontend
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_OPTIONS
+        value: --openssl-legacy-provider
