@@ -2,14 +2,19 @@
 from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 import requests
-from flask_cors import CORS  # Este módulo permite solicitudes entre el frontend y el backend
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
+# Cargar las variables de entorno desde el archivo .env si está presente
+load_dotenv()
 
 # Crear una instancia de Flask
-app = Flask(__name__, template_folder='templates')  # Asegúrate de tener un directorio 'templates'
-CORS(app)  # Permitir solicitudes desde el frontend
+app = Flask(__name__, template_folder='templates')
+CORS(app)
 
 # Clave API (reemplaza con tu propia clave)
-API_KEY = '5de18af6a9f6045c8eb647ddb6881687'
+API_KEY = os.getenv('API_KEY', 'your_default_api_key_here')
 # URL base de la API de OpenWeatherMap
 API_URL = 'http://api.openweathermap.org/data/2.5/forecast'
 
@@ -44,7 +49,9 @@ def index():
     if request.method == 'POST':
         # Manejar la solicitud POST del formulario
         if 'city' in request.form:
+            # Obtener el nombre de la ciudad del formulario
             city = request.form['city']
+            # Hacer una solicitud GET a la API con el nombre de la ciudad
             response = requests.get(API_URL, params={
                 'q': city,
                 'appid': API_KEY,
@@ -52,6 +59,7 @@ def index():
                 'lang': 'es'
             })
         elif 'latitude' in request.form and 'longitude' in request.form:
+            # Obtener el clima por coordenadas geográficas
             latitude = request.form['latitude']
             longitude = request.form['longitude']
             response = requests.get(API_URL, params={
