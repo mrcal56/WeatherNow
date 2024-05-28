@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación de Clima</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Enlace a Weather Icons CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css" rel="stylesheet">
+    <!-- Enlace a tu archivo CSS personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Aplicación de Clima</h1>
+        <!-- Formulario para enviar las coordenadas de geolocalización -->
+        <form id="geoForm" method="POST" class="text-center mb-4">
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <button type="button" class="btn btn-primary" onclick="getLocation()">Obtener Clima por Ubicación Actual</button>
+        </form>
+        <!-- Formulario para ingresar el nombre de la ciudad -->
+        <form method="POST" class="text-center mb-4">
+            <div class="form-group">
+                <input type="text" name="city" class="form-control" placeholder="Ingresa el nombre de la ciudad" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Obtener Clima</button>
+        </form>
+        <!-- Si hay datos de clima disponibles, mostrar la información -->
+        {% if weather_data %}
+            <!-- Información actual -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Clima en {{ weather_data.city.name }}</h2>
+                    <p class="card-text">Temperatura: {{ weather_data.list[0].main.temp }} °C</p>
+                    <p class="card-text">Humedad: {{ weather_data.list[0].main.humidity }} %</p>
+                    <p class="card-text">Condición: {{ weather_data.list[0].weather[0].description }}</p>
+                    <i class="wi {{ weather_icon(weather_data.list[0].weather[0].icon) }} display-1"></i>
+                </div>
+            </div>
+            <!-- Pronóstico para los próximos 3 días -->
+            <h2 class="text-center mb-3">Pronóstico para los próximos 3 días</h2>
+            <div class="row">
+                {% for forecast in weather_data.forecast %}
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ forecast.date }}</h5>
+                                <p class="card-text">Temperatura mínima: {{ forecast.min_temp }} °C</p>
+                                <p class="card-text">Temperatura máxima: {{ forecast.max_temp }} °C</p>
+                                <p class="card-text">Condición: {{ forecast.description }}</p>
+                                <i class="wi {{ weather_icon(forecast.icon) }} display-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <!-- Enlace a jQuery, Popper.js y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Enlace a tu archivo JS personalizado -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+            document.getElementById('geoForm').submit();
+        }
+    </script>
+</body>
+</html>

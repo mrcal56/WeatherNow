@@ -1,11 +1,11 @@
 # Importar los módulos necesarios
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 import requests
 from flask_cors import CORS  # Este módulo permite solicitudes entre el frontend y el backend
 
 # Crear una instancia de Flask
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')  # Asegúrate de tener un directorio 'templates'
 CORS(app)  # Permitir solicitudes desde el frontend
 
 # Clave API (reemplaza con tu propia clave)
@@ -37,7 +37,61 @@ def weather_icon(icon_code):
     }
     return icon_mapping.get(icon_code, "wi-na")
 
-# Ruta de la API para obtener el clima
+# Ruta principal para servir la página HTML
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    weather_data = None
+    if request.method == 'POST':
+        # Manejar la solicitud POST del formulario
+        if 'city' in request.form:
+            city = request.form['city']
+            response = requests.get(API_URL, params={
+                'q': city,
+                'appid': API_KEY,
+                'units': 'metric',
+                'lang': 'es'
+            })
+        elif 'latitude' in request.form and 'longitude' in request.form:
+            latitude = request.form['latitude']
+            longitude = request.form['longitude']
+            response = requests.get(API_URL, params={
+                'lat': latitude,
+                'lon': longitude,
+                'appid': API_KEY,
+                'units': 'metric',
+                'lang': 'es'
+            })
+
+        # Si la solicitud a la API es exitosa (código 200)
+        if response.status_code == 200:
+            weather_data = response.json()
+            forecast_data = []
+            processed_dates = set()  # Conjunto para almacenar fechas procesadas
+
+            # Procesar cada entrada del pronóstico
+            for item in weather_data['list']:
+                forecast_date = datetime.strptime(item['dt_txt'], '%Y-%m-%d %H:%M:%S').date()
+                if forecast_date not in processed_dates and len(forecast_data) < 3:
+                    # Crear un diccionario con los datos del pronóstico
+                    forecast = {
+                        'date': item['dt_txt'],
+                        'min_temp': item['main']['temp_min'],
+                        'max_temp': item['main']['temp_max'],
+                        'description': item['weather'][0]['description'],
+                        'icon': item['weather'][0]['icon']
+                    }
+                    # Añadir el pronóstico a la lista
+                    forecast_data.append(forecast)
+                    # Añadir la fecha al conjunto de fechas procesadas
+                    processed_dates.add(forecast_date)
+
+            # Añadir los datos del pronóstico a weather_data
+            weather_data['forecast'] = forecast_data
+
+    # Renderizar la plantilla index.html con los datos del clima (si los hay)
+    return render_template('index.html', weather_data=weather_data, weather_icon=weather_icon)
+
+# Ruta de la API para obtener el clima (opcional)
 @app.route('/api/weather', methods=['POST'])
 def get_weather():
     data = request.json  # Obtener los datos JSON enviados en la solicitud
