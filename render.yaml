@@ -3,8 +3,8 @@ services:
     name: weather-app-backend
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: poetry install
+    startCommand: poetry run gunicorn app:app
     rootDir: backend
     envVars:
       - key: FLASK_ENV
@@ -14,7 +14,7 @@ services:
     name: weather-app-frontend
     env: node
     plan: free
-    runtime: nodejs16
+    runtime: nodejs14  # Usa una versión más antigua de Node.js
     buildCommand: npm install && npm run build
     startCommand: serve -s build
     rootDir: frontend

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaSun, FaCloud, FaCloudRain, FaSnowflake, FaSmog, FaBolt } from 'react-icons/fa';
+import { FaSun, FaCloud, FaCloudRain, FaSnowflake, FaSmog, FaBolt, FaCloudSun, FaCloudMoon, FaCloudShowersHeavy, FaCloudSunRain, FaCloudMoonRain } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const WeatherDisplay = ({ weatherData }) => {
@@ -8,24 +8,35 @@ const WeatherDisplay = ({ weatherData }) => {
   }
 
   const getWeatherIcon = (description) => {
-    switch (description) {
+    const iconStyle = { color: '#FFB100', fontSize: '3rem' };
+
+    switch (description.toLowerCase()) {
       case 'clear sky':
-        return <FaSun />;
+        return <FaSun style={{ ...iconStyle, color: '#FFD700' }} />;
       case 'few clouds':
+        return <FaCloudSun style={{ ...iconStyle, color: '#B0C4DE' }} />;
       case 'scattered clouds':
+        return <FaCloud style={{ ...iconStyle, color: '#B0C4DE' }} />;
       case 'broken clouds':
-        return <FaCloud />;
-      case 'shower rain':
+        return <FaCloud style={{ ...iconStyle, color: '#B0C4DE' }} />;
+      case 'nubes dispersas':
+        return <FaCloudSun style={{ ...iconStyle, color: '#B0C4DE' }} />;
+      case 'lluvia ligera':
+        return <FaCloudShowersHeavy style={{ ...iconStyle, color: '#1E90FF' }} />;
       case 'rain':
-        return <FaCloudRain />;
+        return <FaCloudRain style={{ ...iconStyle, color: '#1E90FF' }} />;
+      case 'shower rain':
+        return <FaCloudShowersHeavy style={{ ...iconStyle, color: '#1E90FF' }} />;
       case 'thunderstorm':
-        return <FaBolt />;
+        return <FaBolt style={{ ...iconStyle, color: '#FFA500' }} />;
       case 'snow':
-        return <FaSnowflake />;
+        return <FaSnowflake style={{ ...iconStyle, color: '#00BFFF' }} />;
       case 'mist':
-        return <FaSmog />;
+        return <FaSmog style={{ ...iconStyle, color: '#696969' }} />;
+      case 'nubes':
+        return <FaCloud style={{ ...iconStyle, color: '#B0C4DE' }} />;
       default:
-        return <FaCloud />;
+        return <FaCloud style={iconStyle} />;
     }
   };
 

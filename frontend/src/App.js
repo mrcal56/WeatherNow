@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
+  const [location, setLocation] = useState(null);
 
   const getWeather = async (location) => {
     try {
@@ -28,10 +29,16 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (location) {
+      getWeather(location);
+    }
+  }, [location]);
+
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Weather Application</h1>
-      <WeatherForm getWeather={getWeather} />
+      <WeatherForm setLocation={setLocation} />
       {weatherData && <WeatherDisplay weatherData={weatherData} />}
     </div>
   );

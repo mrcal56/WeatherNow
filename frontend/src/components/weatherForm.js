@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form, Button } from 'react-bootstrap';
 
-const WeatherForm = ({ getWeather }) => {
+const WeatherForm = ({ setLocation }) => {
   const [city, setCity] = useState('');
   const [locationFetched, setLocationFetched] = useState(false);
 
@@ -10,34 +10,31 @@ const WeatherForm = ({ getWeather }) => {
     if (!locationFetched && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
-        getWeather({ latitude, longitude });
+        setLocation({ latitude, longitude });
         setLocationFetched(true);
       });
     }
-  }, [locationFetched, getWeather]);
+  }, [locationFetched, setLocation]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    getWeather({ city });
+    setLocation({ city });
     setCity('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="input-group mb-3">
-      <input
+    <Form onSubmit={handleSubmit} className="d-flex">
+      <Form.Control
         type="text"
-        className="form-control"
-        placeholder="Enter city name"
         value={city}
         onChange={(e) => setCity(e.target.value)}
-        required
+        placeholder="Enter city name"
+        className="me-2"
       />
-      <div className="input-group-append">
-        <button className="btn btn-primary" type="submit">
-          <FaSearch />
-        </button>
-      </div>
-    </form>
+      <Button type="submit" variant="primary">
+        <FaSearch />
+      </Button>
+    </Form>
   );
 };
 
