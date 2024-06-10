@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaSun, FaCloud, FaCloudRain, FaSnowflake, FaSmog, FaBolt, FaCloudSun, FaCloudMoon, FaCloudShowersHeavy, FaCloudSunRain, FaCloudMoonRain } from 'react-icons/fa';
+import { FaSun, FaCloud, FaSnowflake, FaSmog, FaBolt, FaCloudSun, FaCloudShowersHeavy } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const WeatherDisplay = ({ weatherData }) => {
@@ -16,15 +16,11 @@ const WeatherDisplay = ({ weatherData }) => {
       case 'few clouds':
         return <FaCloudSun style={{ ...iconStyle, color: '#B0C4DE' }} />;
       case 'scattered clouds':
-        return <FaCloud style={{ ...iconStyle, color: '#B0C4DE' }} />;
       case 'broken clouds':
-        return <FaCloud style={{ ...iconStyle, color: '#B0C4DE' }} />;
       case 'nubes dispersas':
-        return <FaCloudSun style={{ ...iconStyle, color: '#B0C4DE' }} />;
+        return <FaCloud style={{ ...iconStyle, color: '#B0C4DE' }} />;
       case 'lluvia ligera':
-        return <FaCloudShowersHeavy style={{ ...iconStyle, color: '#1E90FF' }} />;
       case 'rain':
-        return <FaCloudRain style={{ ...iconStyle, color: '#1E90FF' }} />;
       case 'shower rain':
         return <FaCloudShowersHeavy style={{ ...iconStyle, color: '#1E90FF' }} />;
       case 'thunderstorm':
@@ -38,6 +34,11 @@ const WeatherDisplay = ({ weatherData }) => {
       default:
         return <FaCloud style={iconStyle} />;
     }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   return (
@@ -56,7 +57,7 @@ const WeatherDisplay = ({ weatherData }) => {
           <div className="col-md-4" key={index}>
             <div className="card mb-3">
               <div className="card-body text-center">
-                <h5 className="card-title">{forecast.date}</h5>
+                <h5 className="card-title">{formatDate(forecast.date)}</h5>
                 <p className="card-text">Min Temp: {forecast.min_temp} °C</p>
                 <p className="card-text">Max Temp: {forecast.max_temp} °C</p>
                 <p className="card-text">Condition: {forecast.description}</p>
