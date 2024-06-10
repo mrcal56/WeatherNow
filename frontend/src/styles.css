@@ -1,0 +1,78 @@
+/* frontend/src/styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* Asegura que el fondo del cuerpo sea blanco */
+    margin: 0; /* Elimina los márgenes predeterminados del cuerpo */
+    padding: 0; /* Elimina los márgenes predeterminados del cuerpo */
+    height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+  }
+  
+  .container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: #ffffff; /* Asegura que el fondo del contenedor sea blanco */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .card h2, .card h5 {
+    color: #555;
+  }
+  
+  .card p {
+    color: #666;
+  }
+  
+  .card .display-1 {
+    font-size: 3rem;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  form button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Estilo para el botón de obtener ubicación */
+  .get-location-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+  }
+  

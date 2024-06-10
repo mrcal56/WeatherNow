@@ -8,7 +8,7 @@ const WeatherDisplay = ({ weatherData }) => {
   }
 
   const getWeatherIcon = (description) => {
-    const iconStyle = { color: '#FFB100', fontSize: '3rem' };
+    const iconStyle = { fontSize: '3rem' };
 
     switch (description.toLowerCase()) {
       case 'clear sky':
