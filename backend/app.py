@@ -15,6 +15,11 @@ API_URL = 'http://api.openweathermap.org/data/2.5/forecast'
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
 
+# Ruta para servir otros archivos estáticos
+@app.route('/<path:path>')
+def static_proxy(path):
+    return send_from_directory(app.static_folder, path)
+
 @app.route('/api/weather', methods=['POST'])
 def get_weather():
     data = request.json
@@ -42,34 +47,20 @@ def get_weather():
     if response.status_code == 200:
         weather_data = response.json()
         forecast_data = []
-        daily_data = {}
+        processed_dates = set()
 
         for item in weather_data['list']:
             forecast_date = datetime.strptime(item['dt_txt'], '%Y-%m-%d %H:%M:%S').date()
-            if forecast_date not in daily_data:
-                daily_data[forecast_date] = {
+            if forecast_date not in processed_dates and len(forecast_data) < 3:
+                forecast = {
+                    'date': item['dt_txt'],
                     'min_temp': item['main']['temp_min'],
                     'max_temp': item['main']['temp_max'],
-                    'descriptions': [item['weather'][0]['description']],
-                    'icons': [item['weather'][0]['icon']]
+                    'description': item['weather'][0]['description'],
+                    'icon': item['weather'][0]['icon']
                 }
-            else:
-                daily_data[forecast_date]['min_temp'] = min(daily_data[forecast_date]['min_temp'], item['main']['temp_min'])
-                daily_data[forecast_date]['max_temp'] = max(daily_data[forecast_date]['max_temp'], item['main']['temp_max'])
-                daily_data[forecast_date]['descriptions'].append(item['weather'][0]['description'])
-                daily_data[forecast_date]['icons'].append(item['weather'][0]['icon'])
-
-        for date, data in daily_data.items():
-            forecast = {
-                'date': date.strftime('%Y-%m-%d'),
-                'min_temp': data['min_temp'],
-                'max_temp': data['max_temp'],
-                'description': max(set(data['descriptions']), key=data['descriptions'].count),
-                'icon': max(set(data['icons']), key=data['icons'].count)
-            }
-            forecast_data.append(forecast)
-
-        forecast_data = sorted(forecast_data, key=lambda x: x['date'])[:3]
+                forecast_data.append(forecast)
+                processed_dates.add(forecast_date)
 
         return jsonify({'city': weather_data['city'], 'forecast': forecast_data})
     else:
@@ -77,4 +68,6 @@ def get_weather():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
+
+
+
