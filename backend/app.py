@@ -5,13 +5,11 @@ import requests
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()  # Carga las variables de entorno desde el archivo .env
 
-# Crear una instancia de Flask, especificando el directorio de construcción como el directorio estático
 app = Flask(__name__, static_folder="../frontend/build", static_url_path="/")
 CORS(app)
 
-# Obtener la clave API desde una variable de entorno
 API_KEY = os.getenv('OPENWEATHER_API_KEY')
 API_URL = 'http://api.openweathermap.org/data/2.5/forecast'
 
@@ -38,7 +36,6 @@ def weather_icon(icon_code):
     }
     return icon_mapping.get(icon_code, "wi-na")
 
-# Ruta para servir el archivo HTML principal de React
 @app.route('/')
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
@@ -91,9 +88,3 @@ def get_weather():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-
-
