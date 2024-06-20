@@ -1,24 +1,47 @@
+import os
 from flask import Flask, request, jsonify, send_from_directory
 from datetime import datetime
 import requests
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Crear una instancia de Flask, especificando el directorio de construcción como el directorio estático
 app = Flask(__name__, static_folder="../frontend/build", static_url_path="/")
 CORS(app)
 
-API_KEY = '5de18af6a9f6045c8eb647ddb6881687'
+# Obtener la clave API desde una variable de entorno
+API_KEY = os.getenv('OPENWEATHER_API_KEY')
 API_URL = 'http://api.openweathermap.org/data/2.5/forecast'
+
+def weather_icon(icon_code):
+    icon_mapping = {
+        "01d": "wi-day-sunny",
+        "01n": "wi-night-clear",
+        "02d": "wi-day-cloudy",
+        "02n": "wi-night-alt-cloudy",
+        "03d": "wi-cloud",
+        "03n": "wi-cloud",
+        "04d": "wi-cloudy",
+        "04n": "wi-cloudy",
+        "09d": "wi-showers",
+        "09n": "wi-showers",
+        "10d": "wi-day-rain",
+        "10n": "wi-night-alt-rain",
+        "11d": "wi-thunderstorm",
+        "11n": "wi-thunderstorm",
+        "13d": "wi-snow",
+        "13n": "wi-snow",
+        "50d": "wi-fog",
+        "50n": "wi-fog"
+    }
+    return icon_mapping.get(icon_code, "wi-na")
 
 # Ruta para servir el archivo HTML principal de React
 @app.route('/')
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
-
-# Ruta para servir otros archivos estáticos
-@app.route('/<path:path>')
-def static_proxy(path):
-    return send_from_directory(app.static_folder, path)
 
 @app.route('/api/weather', methods=['POST'])
 def get_weather():
@@ -68,6 +91,9 @@ def get_weather():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
 
 
 
